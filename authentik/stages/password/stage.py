@@ -18,6 +18,7 @@ from authentik.core.signals import login_failed
 from authentik.flows.challenge import (
     Challenge,
     ChallengeResponse,
+    DiscriminatorField,
     WithUserInfoMixin,
 )
 from authentik.flows.exceptions import StageInvalidException
@@ -74,13 +75,13 @@ class PasswordChallenge(WithUserInfoMixin, Challenge):
 
     recovery_url = CharField(required=False)
 
-    component = CharField(default="ak-stage-password")
+    component = DiscriminatorField("ak-stage-password")
 
 
 class PasswordChallengeResponse(ChallengeResponse):
     """Password challenge response"""
 
-    component = CharField(default="ak-stage-password")
+    component = DiscriminatorField("ak-stage-password")
 
     password = CharField(trim_whitespace=False)
 
