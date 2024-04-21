@@ -34,7 +34,6 @@ from authentik.flows.challenge import (
     HttpChallengeResponse,
     RedirectChallenge,
     ShellChallenge,
-    WithUserInfoChallenge,
 )
 from authentik.flows.exceptions import EmptyFlowException, FlowNonApplicableException
 from authentik.flows.models import (
@@ -79,8 +78,6 @@ def challenge_types():
     subclasses of Challenge, and Challenge itself."""
     mapping = {}
     for cls in all_subclasses(Challenge):
-        if cls == WithUserInfoChallenge:
-            continue
         mapping[cls().fields["component"].default] = cls
     return mapping
 
