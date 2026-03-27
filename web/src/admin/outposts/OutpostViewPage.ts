@@ -188,11 +188,19 @@ export class OutpostViewPage extends AKElement {
                         ])}
                     </div>
                 </div>
-                <div class="pf-l-grid__item pf-m-12-col pf-m-9-col-on-xl pf-m-9-col-on-2xl">
-                    <ak-outposts-provider-list .outpost=${this.outpost}></ak-outposts-provider-list>
+                <div
+                    class="pf-c-card pf-l-grid__item pf-m-12-col pf-m-9-col-on-xl pf-m-9-col-on-2xl"
+                >
+                    <div class="pf-c-card__title">${msg("Configured providers")}</div>
+                    <ak-outposts-provider-list
+                        .items=${this.outpost?.providersObj}
+                    ></ak-outposts-provider-list>
                 </div>
-                <div class="pf-l-grid__item pf-m-12-col">
-                    <ak-outpost-health-list .health=${this.health}></ak-outpost-health-list>
+                <div class="pf-c-card pf-l-grid__item pf-m-12-col">
+                    <div class="pf-c-card__title">
+                        ${msg("Detailed health (data is cached so may be out of date)")}
+                    </div>
+                    <ak-outpost-health-list .items=${this.health}></ak-outpost-health-list>
                 </div>
                 ${this.renderOutpostDeploymentInfo()}
             </div>
