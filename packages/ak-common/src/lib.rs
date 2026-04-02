@@ -2,6 +2,7 @@
 
 pub mod arbiter;
 pub use arbiter::{Arbiter, Event, Tasks};
+pub mod config;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
