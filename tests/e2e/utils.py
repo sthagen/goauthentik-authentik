@@ -12,6 +12,7 @@ from time import sleep
 from typing import Any
 from urllib.parse import urlencode
 
+from channels.testing import ChannelsLiveServerTestCase
 from django.apps import apps
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.db import connection
@@ -45,6 +46,7 @@ from authentik.core.tests.utils import create_test_admin_user
 from authentik.lib.utils.http import get_http_session
 from authentik.tasks.test import use_test_broker
 from tests.docker import DockerTestCase
+from tests.e2e._process import TestDatabaseProcess
 
 IS_CI = "CI" in environ
 RETRIES = int(environ.get("RETRIES", "3")) if IS_CI else 1
@@ -64,9 +66,11 @@ def get_local_ip(override=True) -> str:
         return "0.0.0.0"
 
 
-class E2ETestCase(DockerTestCase, StaticLiveServerTestCase):
+class E2ETestMixin(DockerTestCase):
     host = get_local_ip()
     user: User
+    serve_static = True
+    ProtocolServerProcess = TestDatabaseProcess
 
     def setUp(self):
         if IS_CI:
@@ -94,7 +98,15 @@ class E2ETestCase(DockerTestCase, StaticLiveServerTestCase):
         super().tearDown()
 
 
-class SeleniumTestCase(E2ETestCase):
+class E2ETestCase(E2ETestMixin, StaticLiveServerTestCase):
+    """E2E Test case with django static live server"""
+
+
+class ChannelsE2ETestCase(E2ETestMixin, ChannelsLiveServerTestCase):
+    """E2E Test case with channels live server (websocket + static)"""
+
+
+class SeleniumTestMixin(E2ETestMixin):
     """StaticLiveServerTestCase which automatically creates a Webdriver instance"""
 
     wait_timeout: int
@@ -434,6 +446,14 @@ class SeleniumTestCase(E2ETestCase):
             expected_user.email,
             f"Email mismatch at {self.driver.current_url}: {snippet}",
         )
+
+
+class SeleniumTestCase(SeleniumTestMixin, StaticLiveServerTestCase):
+    """Selenium Test case with django static live server"""
+
+
+class ChannelsSeleniumTestCase(SeleniumTestMixin, ChannelsE2ETestCase):
+    """Selenium Test case with channels live server (websocket + static)"""
 
 
 @lru_cache

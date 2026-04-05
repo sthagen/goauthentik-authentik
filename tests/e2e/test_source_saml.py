@@ -393,7 +393,6 @@ class TestSourceSAML(SeleniumTestCase):
 
         self.login_via_saml_source()
 
-        # sleep(999999)
         self.assert_user(
             User.objects.exclude(username="akadmin")
             .exclude(username__startswith="ak-outpost")
