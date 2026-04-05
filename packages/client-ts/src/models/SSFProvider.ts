@@ -95,6 +95,12 @@ export interface SSFProvider {
      * @memberof SSFProvider
      */
     eventRetention?: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof SSFProvider
+     */
+    pushVerifyCertificates?: boolean;
 }
 
 /**
@@ -137,6 +143,8 @@ export function SSFProviderFromJSONTyped(json: any, ignoreDiscriminator: boolean
         oidcAuthProvidersObj: (json["oidc_auth_providers_obj"] as Array<any>).map(ProviderFromJSON),
         ssfUrl: json["ssf_url"],
         eventRetention: json["event_retention"] == null ? undefined : json["event_retention"],
+        pushVerifyCertificates:
+            json["push_verify_certificates"] == null ? undefined : json["push_verify_certificates"],
     };
 }
 
@@ -167,5 +175,6 @@ export function SSFProviderToJSONTyped(
         signing_key: value["signingKey"],
         oidc_auth_providers: value["oidcAuthProviders"],
         event_retention: value["eventRetention"],
+        push_verify_certificates: value["pushVerifyCertificates"],
     };
 }

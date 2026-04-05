@@ -18,6 +18,8 @@ import type { EventsRequestedEnum } from "./EventsRequestedEnum";
 import { EventsRequestedEnumFromJSON, EventsRequestedEnumToJSON } from "./EventsRequestedEnum";
 import type { SSFProvider } from "./SSFProvider";
 import { SSFProviderFromJSON } from "./SSFProvider";
+import type { SSFStreamStatusEnum } from "./SSFStreamStatusEnum";
+import { SSFStreamStatusEnumFromJSON, SSFStreamStatusEnumToJSON } from "./SSFStreamStatusEnum";
 
 /**
  * SSFStream Serializer
@@ -31,6 +33,12 @@ export interface SSFStream {
      * @memberof SSFStream
      */
     readonly pk: string;
+    /**
+     *
+     * @type {SSFStreamStatusEnum}
+     * @memberof SSFStream
+     */
+    status?: SSFStreamStatusEnum;
     /**
      *
      * @type {number}
@@ -104,6 +112,7 @@ export function SSFStreamFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         pk: json["pk"],
+        status: json["status"] == null ? undefined : SSFStreamStatusEnumFromJSON(json["status"]),
         provider: json["provider"],
         providerObj: SSFProviderFromJSON(json["provider_obj"]),
         deliveryMethod: DeliveryMethodEnumFromJSON(json["delivery_method"]),
@@ -131,6 +140,7 @@ export function SSFStreamToJSONTyped(
     }
 
     return {
+        status: SSFStreamStatusEnumToJSON(value["status"]),
         provider: value["provider"],
         delivery_method: DeliveryMethodEnumToJSON(value["deliveryMethod"]),
         endpoint_url: value["endpointUrl"],

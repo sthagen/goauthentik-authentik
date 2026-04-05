@@ -16,6 +16,10 @@ import type { DeliveryMethodEnum, PaginatedSSFStreamList, SSFStream } from "../m
 import { PaginatedSSFStreamListFromJSON, SSFStreamFromJSON } from "../models/index";
 import * as runtime from "../runtime";
 
+export interface SsfStreamsDestroyRequest {
+    uuid: string;
+}
+
 export interface SsfStreamsListRequest {
     deliveryMethod?: DeliveryMethodEnum;
     endpointUrl?: string;
@@ -34,6 +38,69 @@ export interface SsfStreamsRetrieveRequest {
  *
  */
 export class SsfApi extends runtime.BaseAPI {
+    /**
+     * Creates request options for ssfStreamsDestroy without sending the request
+     */
+    async ssfStreamsDestroyRequestOpts(
+        requestParameters: SsfStreamsDestroyRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["uuid"] == null) {
+            throw new runtime.RequiredError(
+                "uuid",
+                'Required parameter "uuid" was null or undefined when calling ssfStreamsDestroy().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/ssf/streams/{uuid}/`;
+        urlPath = urlPath.replace(
+            `{${"uuid"}}`,
+            encodeURIComponent(String(requestParameters["uuid"])),
+        );
+
+        return {
+            path: urlPath,
+            method: "DELETE",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * SSFStream Viewset
+     */
+    async ssfStreamsDestroyRaw(
+        requestParameters: SsfStreamsDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.ssfStreamsDestroyRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * SSFStream Viewset
+     */
+    async ssfStreamsDestroy(
+        requestParameters: SsfStreamsDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.ssfStreamsDestroyRaw(requestParameters, initOverrides);
+    }
+
     /**
      * Creates request options for ssfStreamsList without sending the request
      */

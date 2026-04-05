@@ -42,6 +42,12 @@ export interface PatchedSSFProviderRequest {
      * @memberof PatchedSSFProviderRequest
      */
     eventRetention?: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof PatchedSSFProviderRequest
+     */
+    pushVerifyCertificates?: boolean;
 }
 
 /**
@@ -70,6 +76,8 @@ export function PatchedSSFProviderRequestFromJSONTyped(
         oidcAuthProviders:
             json["oidc_auth_providers"] == null ? undefined : json["oidc_auth_providers"],
         eventRetention: json["event_retention"] == null ? undefined : json["event_retention"],
+        pushVerifyCertificates:
+            json["push_verify_certificates"] == null ? undefined : json["push_verify_certificates"],
     };
 }
 
@@ -90,5 +98,6 @@ export function PatchedSSFProviderRequestToJSONTyped(
         signing_key: value["signingKey"],
         oidc_auth_providers: value["oidcAuthProviders"],
         event_retention: value["eventRetention"],
+        push_verify_certificates: value["pushVerifyCertificates"],
     };
 }

@@ -45,6 +45,11 @@ pub struct SsfProvider {
     pub ssf_url: Option<String>,
     #[serde(rename = "event_retention", skip_serializing_if = "Option::is_none")]
     pub event_retention: Option<String>,
+    #[serde(
+        rename = "push_verify_certificates",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub push_verify_certificates: Option<bool>,
 }
 
 impl SsfProvider {
@@ -74,6 +79,7 @@ impl SsfProvider {
             oidc_auth_providers_obj,
             ssf_url,
             event_retention: None,
+            push_verify_certificates: None,
         }
     }
 }
